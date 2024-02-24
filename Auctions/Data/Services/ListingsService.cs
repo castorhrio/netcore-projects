@@ -24,6 +24,21 @@ namespace Auctions.Data.Services
             return applicationDbContext;
         }
 
+        public async Task<Listing> GetById(int? id)
+        {
+            var listing = await _context.Listings
+              .Include(l => l.User)
+              .Include(I=>I.Comments)
+              .Include(I=>I.Bids)
+              .ThenInclude(I=>I.User)
+              .FirstOrDefaultAsync(m => m.Id == id);
 
+            return listing;
+        }
+
+        public async Task SaveChanges()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
