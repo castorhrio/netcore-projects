@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Auctions.Data;
+﻿using Microsoft.AspNetCore.Mvc;
 using Auctions.Models;
 using Auctions.Data.Services;
-using System.IO;
 using System.Security.Claims;
 
 namespace Auctions.Controllers
@@ -19,9 +11,9 @@ namespace Auctions.Controllers
         private readonly IBidsService _bidService;
         private readonly ICommentsService _commentsService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        private const int PAGE_SIZE = 5; 
+        private const int PAGE_SIZE = 5;
 
-        public ListingsController(IListingsService listingsService,IBidsService bidService, ICommentsService commentsService, IWebHostEnvironment webHostEnvironment)
+        public ListingsController(IListingsService listingsService, IBidsService bidService, ICommentsService commentsService, IWebHostEnvironment webHostEnvironment)
         {
             _listingsService = listingsService;
             _bidService = bidService;
@@ -38,13 +30,13 @@ namespace Auctions.Controllers
                 applicationDbContext = applicationDbContext.Where(a => a.Title.Contains(searchString));
             }
 
-            return View(await PaginatedList<Listing>.CreateAsync(applicationDbContext.Where(a=>a.IsSold == false).AsNoTracking(), pageIndex ?? 1, PAGE_SIZE));
+            return View(await PaginatedList<Listing>.CreateAsync(applicationDbContext.Where(a => a.IsSold == false).AsNoTracking(), pageIndex ?? 1, PAGE_SIZE));
         }
 
         public async Task<IActionResult> MyListings(int? pageIndex)
         {
             var applicationDbContext = _listingsService.GetAll();
-            return View("Index",await PaginatedList<Listing>.CreateAsync(applicationDbContext.Where(a=>a.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageIndex ?? 1, PAGE_SIZE));
+            return View("Index", await PaginatedList<Listing>.CreateAsync(applicationDbContext.Where(a => a.IdentityUserId == User.FindFirstValue(ClaimTypes.NameIdentifier)).AsNoTracking(), pageIndex ?? 1, PAGE_SIZE));
         }
 
         public async Task<IActionResult> MyBids(int? pageIndex)
@@ -65,7 +57,7 @@ namespace Auctions.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ListingViewModel listing)
         {
-            if(listing.Image != null)
+            if (listing.Image != null)
             {
                 string uploadDir = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
                 string fileName = listing.Image.FileName;
@@ -137,7 +129,7 @@ namespace Auctions.Controllers
         {
             if (ModelState.IsValid)
             {
-               await  _commentsService.Add(comment);
+                await _commentsService.Add(comment);
             }
 
             var listing = await _listingsService.GetById(comment.ListingId);
