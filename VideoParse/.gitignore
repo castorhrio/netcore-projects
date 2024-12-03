@@ -1,0 +1,5 @@
+bin
+obj
+resource/ffmpeg.exe
+resource/yt-dlp.exe
+.vs
