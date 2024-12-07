@@ -3,7 +3,7 @@
     public partial class Form1 : Form
     {
 
-        private const int GridSize = 20;
+        private const int GridSize = 30;
         private const int CellSize = 30;
 
         private readonly Node[,] grid;
@@ -65,7 +65,7 @@
                 {
                     currentNode.State = NodeState.Visited;
                     Invalidate();
-                    await Task.Delay(50);
+                    await Task.Delay(10);
                 }
 
                 foreach (var neighbor in GetNeighbors(currentNode))
@@ -96,7 +96,7 @@
                         {
                             neighbor.State = NodeState.Visited;
                             Invalidate();
-                            await Task.Delay(50);
+                            await Task.Delay(10);
                         }
                     }
                 }
@@ -140,7 +140,7 @@
                 {
                     current.State = NodeState.Path;
                     Invalidate();
-                    await Task.Delay(50);
+                    await Task.Delay(10);
                 }
 
                 current = current.Parent;
